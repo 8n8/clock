@@ -43,16 +43,16 @@ update (TheTime t) model =
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = "True's clock"
+    { title = prettyTime model
     , body = [ Element.layout [] (viewHelp model) ]
     }
 
 
-viewHelp : Model -> Element.Element Msg
-viewHelp model =
+prettyTime : Time.Posix -> String
+prettyTime t =
     let
         millis =
-            toFloat <| Time.posixToMillis model
+            toFloat <| Time.posixToMillis t
 
         millisInDay =
             24 * 60 * 60 * 1000
@@ -60,6 +60,12 @@ viewHelp model =
         days =
             millis / millisInDay
     in
+        prettyFloat days
+    
+
+
+viewHelp : Model -> Element.Element Msg
+viewHelp model =
     Element.el
         [ Element.width <| Element.fill
         , Element.height <| Element.fill
@@ -71,7 +77,7 @@ viewHelp model =
             , Element.centerX
             , Element.centerY
             ]
-            (Element.text <| prettyFloat days)
+            (Element.text <| prettyTime model)
 
 
 prettyFloat : Float -> String
